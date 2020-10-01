@@ -203,10 +203,6 @@ const NavBar = props => {
                         </IconButton>
                     </div>
 
-                    <Typography
-                        variant="h6">
-                        ADMIN
-                    </Typography>
                 </Toolbar>
                 
             </AppBar>

@@ -1,15 +1,15 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Navbar from "./component/Navbar";
-import { Switch, Route, withRouter } from "react-router-dom";
-
+import ProductList from "./component/ProductList";
+import Detail from './component/Detail'
+import { Route } from "react-router-dom";
 function App() {
   return (
     <div className="App">
-      <Switch>
         <Navbar />
-      </Switch>
+        <Route path="/" exact component={ProductList} />
+        <Route path="/product/*_:id" component={Detail} />
     </div>
   );
 }
