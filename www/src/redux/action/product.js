@@ -7,9 +7,9 @@ export const fetchProduct = () => (dispatch) => {
 
 	return RestApi.getAmiibos()
 		.then(response => {
-			const allProduct = response.data.map(a => {
+			const allProduct = response.data.map(item => {
 				return ({
-					...a,
+					...item,
 					price: (Math.floor(Math.random() * (4501 - 1499)) + 1499) * 10
 				})
 			});

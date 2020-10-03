@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -12,7 +12,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import { AddToCart } from "../redux/action/cart";
-
+import {formatPrice} from '../helper/formatPrice'
 const useStyles = makeStyles((theme) => ({
   paper: {
     margin: "20px",
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
   container: {
     padding: "20px",
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
   },
   image: {
     display: "flex",
@@ -35,74 +35,97 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 10,
   },
 }));
+const Alert = (props) => {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+};
 const Details = (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const detail = props.location.state;
   const [quantity, setQuantity] = useState(1);
+  const [open, setOpen] = useState(false);
   const handleAddCart = () => {
-    dispatch(AddToCart({items:"test"}));
+    let item = detail
+    item.quantity = quantity
+    dispatch(AddToCart(item));
+    setOpen(true);
   };
+  const handleCloseAlert = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
   return (
-    <Paper elevation={0} className={classes.paper}>
-      <Container className={classes.container}>
-        <Grid container style={{ flexGrow: 1, width: "100%" }} spacing={2}>
-          <Grid item className={classes.image} style={{ flexGrow: 1 }}>
-            <img height="280" src={detail.image} />
-          </Grid>
-          <Grid item style={{ flexGrow: 1 }}>
-            <div
-              style={{ display: "flex", alignItems: "center", marginTop: 40 }}
-            >
-              <Typography variant="body1">
-                <strong>Personaje:</strong>
-              </Typography>
-              <Typography variant="body1">&nbsp;{detail.name}</Typography>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Typography variant="body1">
-                <strong>Title:</strong>
-              </Typography>
-              <Typography variant="body1">&nbsp;{detail.title}</Typography>
-            </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <Typography variant="body1">
-                <strong>Product Detail:</strong>
-              </Typography>
-              <Typography variant="body1">&nbsp;{detail.details}</Typography>
-            </div>
-            <Typography variant="h6" className={classes.price}>
-              <strong>{detail.price} VND</strong>
-            </Typography>
-            <div
-              style={{ display: "flex", alignItems: "center", marginTop: 20 }}
-            >
-              <TextField
-                className={classes.quantity}
-                label="Cantidad"
-                type="number"
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                value={quantity}
-                onChange={(e) => {
-                  setQuantity(e.target.value);
-                }}
-              />
-              <Button
-                variant="contained"
-                color="secondary"
-                onClick={(e) => {
-                  handleAddCart();
-                }}
+    <>
+      <Paper elevation={0} className={classes.paper}>
+        <Container className={classes.container}>
+            <Grid className={classes.image} style={{ flexGrow: 1 }}>
+              <img height="280" src={detail.image} alt={detail.name}/>
+            </Grid>
+            <Grid style={{ flexGrow: 1 }}>
+              <div
+                style={{ display: "flex", alignItems: "center", marginTop: 40 }}
               >
-                Add To Cart
-              </Button>
-            </div>
-          </Grid>
-        </Grid>
-      </Container>
-    </Paper>
+                <Typography variant="body1">
+                  <strong>Personaje:</strong>
+                </Typography>
+                <Typography variant="body1">&nbsp;{detail.name}</Typography>
+              </div>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Typography variant="body1">
+                  <strong>Title:</strong>
+                </Typography>
+                <Typography variant="body1">&nbsp;{detail.title}</Typography>
+              </div>
+              <div style={{  alignItems: "center" }}>
+                <Typography variant="body1">
+                  <strong>Product Detail:</strong>
+                </Typography>
+                <Typography variant="body1">&nbsp;{detail.details}</Typography>
+              </div>
+              <Typography variant="h6" className={classes.price}>
+                <strong>{formatPrice(detail.price)} VND</strong>
+              </Typography>
+              <div
+                style={{ display: "flex", alignItems: "center", marginTop: 20 }}
+              >
+                <TextField
+                  className={classes.quantity}
+                  label="Cantidad"
+                  type="number"
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  value={quantity}
+                  onChange={(e) => {
+                    setQuantity(e.target.value);
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => {
+                    handleAddCart();
+                  }}
+                >
+                  Add To Cart
+                </Button>
+              </div>
+            </Grid>
+          <Snackbar
+            open={open}
+            autoHideDuration={1500}
+            onClose={handleCloseAlert}
+          >
+            <Alert onClose={handleCloseAlert} severity="success">
+              Add to cart success.
+            </Alert>
+          </Snackbar>
+        </Container>
+      </Paper>
+    </>
   );
 };
 

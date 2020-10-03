@@ -1,5 +1,5 @@
-import React from "react";
-import { withRouter } from 'react-router-dom'
+import React,{useState} from "react";
+import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -9,13 +9,14 @@ import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-
+import { AddToCart } from "../redux/action/cart";
+import { useDispatch } from "react-redux";
+import {formatPrice} from '../helper/formatPrice'
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     width: 200,
     margin: 8,
-    display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
   },
@@ -55,18 +56,34 @@ const Alert = (props) => {
 };
 
 const Product = (props) => {
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState()
   const classes = useStyles();
+
+  const addCartHandle = () => {
+    let itemCart = props.details
+    itemCart.quantity = 1
+    dispatch(AddToCart(itemCart))
+    setOpen(true)
+  };
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
+    setOpen(false);
+};
+
   return (
-    <div className="col-sm-2">
+    <div className="col-lg-2 col-sm-1 col-md-4 col-xs-6">
       <Card className={classes.root}>
         <CardActionArea
           className={classes.info}
-          onClick={_ => {
+          onClick={(_) => {
             props.history.push({
-                pathname: `product/${props.details.name.trim()}_${props.details.id.trim()}`,
-                state: props.details
-            })
-        }}
+              pathname: `product/${props.details.name.trim()}_${props.details.id.trim()}`,
+              state: props.details,
+            });
+          }}
         >
           <CardMedia
             className={classes.cover}
@@ -81,7 +98,7 @@ const Product = (props) => {
               {props.details.title}
             </Typography>
             <Typography className={classes.price}>
-              {props.details.price}
+              {formatPrice(props.details.price)} VND
             </Typography>
           </div>
         </CardActionArea>
@@ -90,13 +107,16 @@ const Product = (props) => {
           size="small"
           className={classes.button}
           startIcon={<AddShoppingCartIcon />}
+          onClick={() => addCartHandle()}
         >
           Add to cart
         </Button>
 
-        <Snackbar autoHideDuration={1500}>
-          <Alert severity="success">El producto fue agregado al carro.</Alert>
-        </Snackbar>
+         <Snackbar open={open} autoHideDuration={1500} onClose={handleCloseAlert}>
+                <Alert onClose={handleCloseAlert} severity="success">
+                    Add to cart success.
+                </Alert>
+          </Snackbar>
       </Card>
     </div>
   );

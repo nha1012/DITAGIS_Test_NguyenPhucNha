@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Product from "../component/Product";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../redux/action/product";
@@ -15,7 +15,7 @@ const ProductList = () => {
       <div className="container-flux">
         <div className="row">
           {allProduct.map((value, index) => {
-            return <Product key={index} details={value}></Product>
+            return <Product key={index} details={value}></Product>;
           })}
         </div>
       </div>

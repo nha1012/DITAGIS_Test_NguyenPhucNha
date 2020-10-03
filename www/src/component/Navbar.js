@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import { useDispatch, useSelector } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
-// import { setSearchText } from '../redux/filters/ActionCreators'
-
 import { fade, makeStyles, useTheme } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Divider from '@material-ui/core/Divider';
@@ -18,7 +16,7 @@ import Drawer from '@material-ui/core/Drawer';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-// import ShoppingCart from './shopping_cart/ShoppingCart';
+import Cart from './Cart';
 
 
 const drawerWidth = 400;
@@ -74,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
         marginRight: 0,
     },
     title: {
-        flexGrow: 1,
+        marginRight:30,
         cursor: 'pointer'
     },
     search: {
@@ -132,7 +130,7 @@ const NavBar = props => {
     const classes = useStyles();
     const [searchText, setSearchTextInput] = useState('');
     // const dispatch = useDispatch();
-    // const ShoppingCartState = useSelector(state => state.shoppingCartState);
+    const cartItem = useSelector(state => state.cartReducer);
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -150,6 +148,18 @@ const NavBar = props => {
             pathname: '/',
         });
     }
+    const handleGoAdmin = (event) => {
+        event.preventDefault();
+        props.history.push({
+            pathname: '/admin',
+        });
+    }
+    const handleGoAbout = (event) => {
+        event.preventDefault();
+        props.history.push({
+            pathname: '/about',
+        });
+    }
 
     const handleSearchChange = (event) => {
         event.preventDefault();
@@ -162,7 +172,7 @@ const NavBar = props => {
 
     }
 
-    // const quantityItems = Object.values(ShoppingCartState.items).reduce((sum, item) => { return sum + parseInt(item.quantity) }, 0);
+    const quantityItems = Object.values(cartItem.items).reduce((sum, item) => { return sum + parseInt(item.quantity) }, 0);
 
     return (
         <>
@@ -174,22 +184,18 @@ const NavBar = props => {
                         onClick={event => handleGoHome(event)}>
                         DITAGIS
                     </Typography>
-                    
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon />
-                        </div>
-                        <InputBase
-                            placeholder="Buscar"
-                            classes={{
-                                root: classes.inputRoot,
-                                input: classes.inputInput,
-                            }}
-                            onChange={handleSearchChange}
-                            value={searchText}
-                            inputProps={{ 'aria-label': 'buscar' }}
-                        />
-                    </div>
+                    <Typography
+                        variant="h6"
+                        className={classes.title}
+                        onClick={event => handleGoAdmin(event)}>
+                        Admin
+                    </Typography>
+                     <Typography
+                        variant="h6"
+                        className={classes.title}
+                        onClick={event => handleGoAbout(event)}>
+                        About Website
+                    </Typography>
                     <div className={classes.grow} />
                     <div className={classes.sectionDesktop}>
                         <IconButton
@@ -197,16 +203,13 @@ const NavBar = props => {
                             edge="end"
                             onClick={handleDrawerOpen}
                             className={clsx(open && classes.hide)}>
-                            <Badge badgeContent={4} color="secondary">
+                            <Badge badgeContent={quantityItems} color="secondary">
                                 <ShoppingCartIcon />
                             </Badge>
                         </IconButton>
                     </div>
-
                 </Toolbar>
-                
             </AppBar>
-            
             <Drawer
                 className={classes.drawer}
                 variant="persistent"
@@ -221,14 +224,14 @@ const NavBar = props => {
                         <ShoppingCartIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.cartTitle}>
-                        Carrito de Compras
+                        Cart
                     </Typography>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                 </div>
                 <Divider />
-                {/* <ShoppingCart /> */}
+                <Cart />
             </Drawer>
         </>
     );
