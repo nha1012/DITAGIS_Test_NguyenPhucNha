@@ -1,11 +1,13 @@
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
-body{
+.MuiAppBar-colorPrimary {
+  color: #fff;
+  background-color: #1b1b1b !important;
+}
+body {
   background-color: #e9e7e7;
 }
 @keyframes App-logo-spin {

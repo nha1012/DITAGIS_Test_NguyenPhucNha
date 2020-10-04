@@ -7,7 +7,7 @@ import ShoppingCartItem from "./ShoppingCartItem";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import { Typography } from "@material-ui/core";
-import {formatPrice} from "../helper/formatPrice";
+import { formatPrice } from "../helper/formatPrice";
 import { withRouter } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -32,7 +32,6 @@ const Cart = (props) => {
   const totalCart = Object.values(cartItem).reduce((sum, item) => {
     return sum + parseInt(item.quantity) * parseInt(item.price);
   }, 0);
-
   return (
     <Container className={classes.container}>
       <Grid container className={classes.pannel}>
@@ -54,7 +53,7 @@ const Cart = (props) => {
               width: "100%",
             }}
           >
-            <Typography variant="overline">TOTAL</Typography>
+            <Typography variant="overline">Tổng cộng </Typography>
             <Typography variant="h6">{formatPrice(totalCart)} VND</Typography>
           </div>
           <Button
@@ -62,7 +61,7 @@ const Cart = (props) => {
             variant="contained"
             color="secondary"
           >
-            Pay
+            Chi tiết giỏ hàng
           </Button>
         </Grid>
       </Grid>

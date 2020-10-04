@@ -3,8 +3,13 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-import { UpdateToCart } from "../redux/action/cart";
-import { useDispatch } from "react-redux";
+import { UpdateToCart, RemoveCartItem } from "../redux/action/cart";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import {formatPrice} from '../helper/formatPrice'
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
 const useStyles = makeStyles((theme) => ({
   item: {
     display: "flex",
@@ -47,9 +52,27 @@ const useStyles = makeStyles((theme) => ({
 
 const ShoppingCartItem = (props) => {
   const classes = useStyles();
-  let product = props.product;
-  const [quantity, setQuantity] = useState(product.quantity);
+  let product = { ...props.product };
+  const [quantity, setQuantity] = useState(parseInt(product.quantity));
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const agreeRemoveItem = () => {
+    setOpen(false);
+    dispatch(RemoveCartItem(`${product.id}_${product.name}`));
+  };
+
+  useEffect(() => {
+    if (quantity == 0) {
+      setOpen(true);
+      setQuantity(1);
+      product.quantity = 1;
+      dispatch(UpdateToCart(product));
+    }
+  }, [product]);
+
   return (
     <div className={classes.item}>
       <div className={classes.lefthalf}>
@@ -60,32 +83,56 @@ const ShoppingCartItem = (props) => {
           <Typography variant="button" display="block" gutterBottom>
             <strong>{product.name}</strong>
           </Typography>
-          <span style={{ fontSize: 11 }}>PRECIO UNIDAD</span>
           <Typography variant="body1" color="secondary">
-            <strong>{product.price}</strong>
+            <strong>{formatPrice(product.price)} VND</strong>
           </Typography>
         </div>
       </div>
       <div className={classes.actions}>
         <TextField
           className={classes.quantity}
-          label="Cantidad"
+          label="Số lượng"
           type="number"
           InputLabelProps={{
             shrink: true,
           }}
           variant="outlined"
-          value={quantity}
+          value={product.quantity}
           size="small"
           onChange={(event) => {
-            product.quantity = parseInt(event.target.value);
-            setQuantity(event.target.value);
-            dispatch(UpdateToCart(product));
+            if (quantity >= 1) {
+              product.quantity = parseInt(event.target.value);
+              setQuantity(event.target.value);
+              dispatch(UpdateToCart(product));
+            }
           }}
         />
-        <Button size="small" className={classes.remove}>
-          Eliminar
+        <Button
+          onClick={() => {
+            setOpen(true);
+          }}
+          size="small"
+          className={classes.remove}
+        >
+          Xóa
         </Button>
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="responsive-dialog-title"
+        >
+          <DialogTitle id="responsive-dialog-title">
+            {"Bạn có đồng ý xóa sản phẩm này!"}
+          </DialogTitle>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose} color="primary">
+              Disagree
+            </Button>
+            <Button onClick={agreeRemoveItem} color="primary" autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import { withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -9,9 +9,9 @@ import Typography from "@material-ui/core/Typography";
 import AddShoppingCartIcon from "@material-ui/icons/AddShoppingCart";
 import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
-import { AddToCart } from "../redux/action/cart";
-import { useDispatch } from "react-redux";
-import {formatPrice} from '../helper/formatPrice'
+import { AddToCart, RemoveCartItem } from "../redux/action/cart";
+import { useDispatch, useSelector } from "react-redux";
+import { formatPrice } from "../helper/formatPrice";
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -56,22 +56,34 @@ const Alert = (props) => {
 };
 
 const Product = (props) => {
-  const dispatch = useDispatch();
-  const [open, setOpen] = useState()
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState();
+  const cartItems = useSelector((state) => state.cartReducer);
 
-  const addCartHandle = () => {
-    let itemCart = props.details
-    itemCart.quantity = 1
-    dispatch(AddToCart(itemCart))
-    setOpen(true)
+  const handleAddCart =async () => {
+    let finded = undefined
+    let newItem = {...props.details};
+    newItem.quantity = 1;
+    finded = Object.values(cartItems.items).find(
+      (item) => item.id === props.details.id
+    );
+    if (finded !== undefined) {
+      finded.quantity = await finded.quantity + newItem.quantity;
+      dispatch(RemoveCartItem(`${finded.id}_${finded.name}`))
+      dispatch(AddToCart(finded));
+      setOpen(true)
+    }else{
+      dispatch(AddToCart(newItem));
+      setOpen(true);
+    }
   };
   const handleCloseAlert = (event, reason) => {
-    if (reason === 'clickaway') {
-        return;
+    if (reason === "clickaway") {
+      return;
     }
     setOpen(false);
-};
+  };
 
   return (
     <div className="col-lg-2 col-sm-1 col-md-4 col-xs-6">
@@ -107,16 +119,20 @@ const Product = (props) => {
           size="small"
           className={classes.button}
           startIcon={<AddShoppingCartIcon />}
-          onClick={() => addCartHandle()}
+          onClick={() => handleAddCart()}
         >
-          Add to cart
+          Thêm vào giỏ hàng
         </Button>
 
-         <Snackbar open={open} autoHideDuration={1500} onClose={handleCloseAlert}>
-                <Alert onClose={handleCloseAlert} severity="success">
-                    Add to cart success.
-                </Alert>
-          </Snackbar>
+        <Snackbar
+          open={open}
+          autoHideDuration={1500}
+          onClose={handleCloseAlert}
+        >
+          <Alert onClose={handleCloseAlert} severity="success">
+            Đã thêm vào giỏ hàng.
+          </Alert>
+        </Snackbar>
       </Card>
     </div>
   );

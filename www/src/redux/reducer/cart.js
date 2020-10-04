@@ -14,10 +14,10 @@ export const CartReducer = (state = initialState, action) => {
         action.payload;
       return newState;
 
-    // case ActionTypes.CART_REMOVE_ITEM:
-    //   newState = { ...state };
-    //   delete newState.items[`${action.payload}`];
-    //   return newState;
+    case ActionTypes.CART_REMOVE_ITEM:
+      newState = { ...state };
+      delete newState.items[`${action.payload}`];
+      return newState;
     
     case ActionTypes.CART_UPDATE_ITEM:
       newState = { ...state };
