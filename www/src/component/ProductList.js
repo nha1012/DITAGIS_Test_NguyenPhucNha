@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Product from "../component/Product";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProduct } from "../redux/action/product";
@@ -7,13 +7,15 @@ const ProductList = () => {
   const isLoading = useSelector((state) => state.productReducer.isLoading);
   const allProduct = useSelector((state) => state.productReducer.allProduct);
   const dispatch = useDispatch();
+  let newAllProduct = [];
   useEffect(() => {
-    dispatch(fetchProduct());
+    if (!allProduct) dispatch(fetchProduct());
   }, []);
+
   if (!isLoading && allProduct)
     return (
-      <div className="container-flux">
-        <div className="row">
+      <div className="container product">
+        <div className="row mt-3">
           {allProduct.map((value, index) => {
             return <Product key={index} details={value}></Product>;
           })}
@@ -21,7 +23,15 @@ const ProductList = () => {
       </div>
     );
   else {
-    return <Loader type="ThreeDots" color="#00BFFF" height={100} width={100} />;
+    return (
+      <Loader
+        className={"loader"}
+        type="ThreeDots"
+        color="#00BFFF"
+        height={100}
+        width={100}
+      />
+    );
   }
 };
 export default ProductList;

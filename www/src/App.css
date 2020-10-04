@@ -7,6 +7,15 @@
   color: #fff;
   background-color: #1b1b1b !important;
 }
+.product {
+  margin-top: 80px;
+}
+.col-lg-2.col-sm-1.col-md-4.col-xs-6.item {
+  margin: 0px 16px;
+}
+.loader {
+  margin-top: 80px;
+}
 body {
   background-color: #e9e7e7;
 }

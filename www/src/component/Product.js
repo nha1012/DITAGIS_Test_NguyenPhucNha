@@ -86,7 +86,7 @@ const Product = (props) => {
   };
 
   return (
-    <div className="col-lg-2 col-sm-1 col-md-4 col-xs-6">
+    <div className="col-lg-2 col-sm-1 col-md-4 col-xs-6 item">
       <Card className={classes.root}>
         <CardActionArea
           className={classes.info}

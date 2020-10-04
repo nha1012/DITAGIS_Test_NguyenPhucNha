@@ -9,8 +9,7 @@ export const fetchProduct = () => (dispatch) => {
 		.then(response => {
 			const allProduct = response.data.map(item => {
 				return ({
-					...item,
-					price: (Math.floor(Math.random() * (4501 - 1499)) + 1499) * 10
+					...item
 				})
 			});
 			dispatch(amiibosFetch(allProduct))

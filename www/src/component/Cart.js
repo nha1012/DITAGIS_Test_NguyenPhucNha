@@ -37,11 +37,7 @@ const Cart = (props) => {
       <Grid container className={classes.pannel}>
         <Grid item style={{ width: "100%" }}>
           {Object.values(cartItem).map((item, index) => {
-            return (
-              <>
-                <ShoppingCartItem key={index} product={item} />
-              </>
-            );
+            return <ShoppingCartItem key={index} product={item} />;
           })}
         </Grid>
         <Grid item className={classes.pagar}>

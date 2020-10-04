@@ -65,7 +65,7 @@ const ShoppingCartItem = (props) => {
   };
 
   useEffect(() => {
-    if (quantity == 0) {
+    if (quantity <= 0) {
       setOpen(true);
       setQuantity(1);
       product.quantity = 1;
