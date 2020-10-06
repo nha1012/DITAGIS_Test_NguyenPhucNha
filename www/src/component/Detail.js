@@ -15,6 +15,7 @@ import { formatPrice } from "../helper/formatPrice";
 const useStyles = makeStyles((theme) => ({
   paper: {
     margin: "20px",
+    marginTop: 100,
   },
   container: {
     padding: "20px",
@@ -52,13 +53,13 @@ const Details = (props) => {
       (item) => item.id === detail.id
     );
     if (finded !== undefined) {
-      newItem.quantity = parseInt(quantity)
+      newItem.quantity = parseInt(quantity);
       finded.quantity = (await finded.quantity) + newItem.quantity;
       dispatch(RemoveCartItem(`${finded.id}_${finded.name}`));
       dispatch(AddToCart(finded));
       setOpen(true);
     } else {
-      newItem.quantity = parseInt(quantity)
+      newItem.quantity = parseInt(quantity);
       dispatch(AddToCart(newItem));
       setOpen(true);
     }

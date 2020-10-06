@@ -16,6 +16,13 @@
 .loader {
   margin-top: 80px;
 }
+.MuiPagination-ul {
+  justify-content: center;
+  margin: 10px;
+}
+.admin{
+  margin-top: 100px;
+}
 body {
   background-color: #e9e7e7;
 }

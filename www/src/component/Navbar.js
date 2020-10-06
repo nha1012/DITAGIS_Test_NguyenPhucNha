@@ -13,7 +13,7 @@ import Drawer from "@material-ui/core/Drawer";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import CssBaseline from '@material-ui/core/CssBaseline';
+import CssBaseline from "@material-ui/core/CssBaseline";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import PropTypes from "prop-types";
 import Cart from "./Cart";
@@ -92,12 +92,6 @@ const NavBar = (props) => {
       pathname: "/admin",
     });
   };
-  const handleGoAbout = (event) => {
-    event.preventDefault();
-    props.history.push({
-      pathname: "/about",
-    });
-  };
 
   const quantityItems = Object.values(cartItem.items).reduce((sum, item) => {
     return sum + parseInt(item.quantity);
@@ -106,45 +100,38 @@ const NavBar = (props) => {
   return (
     <React.Fragment>
       <CssBaseline />
-        <ElevationScroll {...props}>
-      <AppBar >
-        <Toolbar  my={2}>
-          <Typography
-            variant="h6"
-            className={classes.title}
-            onClick={(event) => handleGoHome(event)}
-          >
-            DITAGIS
-          </Typography>
-          <Typography
-            variant="h6"
-            className={classes.title}
-            onClick={(event) => handleGoAdmin(event)}
-          >
-            Admin
-          </Typography>
-          <Typography
-            variant="h6"
-            className={classes.title}
-            onClick={(event) => handleGoAbout(event)}
-          >
-            About Website
-          </Typography>
-          <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
-            <IconButton
-              color="inherit"
-              edge="end"
-              onClick={handleDrawerOpen}
-              className={clsx(open && classes.hide)}
+      <ElevationScroll {...props}>
+        <AppBar>
+          <Toolbar my={2}>
+            <Typography
+              variant="h6"
+              className={classes.title}
+              onClick={(event) => handleGoHome(event)}
             >
-              <Badge badgeContent={quantityItems} color="secondary">
-                <ShoppingCartIcon />
-              </Badge>
-            </IconButton>
-          </div>
-        </Toolbar>
-      </AppBar>
+              DITAGIS
+            </Typography>
+            <Typography
+              variant="h6"
+              className={classes.title}
+              onClick={(event) => handleGoAdmin(event)}
+            >
+              Admin
+            </Typography>
+            <div className={classes.grow} />
+            <div className={classes.sectionDesktop}>
+              <IconButton
+                color="inherit"
+                edge="end"
+                onClick={handleDrawerOpen}
+                className={clsx(open && classes.hide)}
+              >
+                <Badge badgeContent={quantityItems} color="secondary">
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            </div>
+          </Toolbar>
+        </AppBar>
       </ElevationScroll>
       <Drawer
         className={classes.drawer}

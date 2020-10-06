@@ -9,19 +9,19 @@ const ProductList = () => {
   const isLoading = useSelector((state) => state.productReducer.isLoading);
   let allProduct = useSelector((state) => state.productReducer.allProduct);
   const dispatch = useDispatch();
-  const pageLimit = 10
-  const [currentPage, setCurentPage] = useState(1)
-  const firstItem = (currentPage - 1 ) * 10
-  const lastItem = pageLimit * currentPage
-  let totalPage = undefined
+  const pageLimit = 10;
+  const [currentPage, setCurentPage] = useState(1);
+  const firstItem = (currentPage - 1) * 10;
+  const lastItem = pageLimit * currentPage;
+  let totalPage = undefined;
 
   if (Array.isArray(allProduct)) {
-    totalPage = allProduct.length / 10
-    allProduct = allProduct.slice(firstItem, lastItem)
+    totalPage = Math.ceil(allProduct.length / 10);
+    allProduct = allProduct.slice(firstItem, lastItem);
   }
 
   useEffect(() => {
-    if (!allProduct) dispatch(fetchProduct());
+    dispatch(fetchProduct());
   }, []);
 
   const handleChangePage = (event, value) => {
@@ -36,7 +36,12 @@ const ProductList = () => {
             return <Product key={index} details={value}></Product>;
           })}
         </div>
-        <Pagination count={totalPage} page={currentPage} onChange={handleChangePage} size="large" />
+        <Pagination
+          count={totalPage}
+          page={currentPage}
+          onChange={handleChangePage}
+          size="large"
+        />
       </div>
     );
   else {

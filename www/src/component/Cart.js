@@ -57,7 +57,7 @@ const Cart = (props) => {
             variant="contained"
             color="secondary"
           >
-            Chi tiết giỏ hàng
+            Thanh Toán
           </Button>
         </Grid>
       </Grid>

@@ -61,19 +61,19 @@ const Product = (props) => {
   const [open, setOpen] = useState();
   const cartItems = useSelector((state) => state.cartReducer);
 
-  const handleAddCart =async () => {
-    let finded = undefined
-    let newItem = {...props.details};
+  const handleAddCart = async () => {
+    let finded = undefined;
+    let newItem = { ...props.details };
     newItem.quantity = 1;
     finded = Object.values(cartItems.items).find(
       (item) => item.id === props.details.id
     );
     if (finded !== undefined) {
-      finded.quantity = await finded.quantity + newItem.quantity;
-      dispatch(RemoveCartItem(`${finded.id}_${finded.name}`))
+      finded.quantity = (await finded.quantity) + newItem.quantity;
+      dispatch(RemoveCartItem(`${finded.id}_${finded.name}`));
       dispatch(AddToCart(finded));
-      setOpen(true)
-    }else{
+      setOpen(true);
+    } else {
       dispatch(AddToCart(newItem));
       setOpen(true);
     }
@@ -99,7 +99,7 @@ const Product = (props) => {
         >
           <CardMedia
             className={classes.cover}
-            title="picture"
+            title={props.details.image}
             image={props.details.image}
           />
           <div className={classes.content}>
